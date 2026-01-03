@@ -2,285 +2,197 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>KriBot – </title>
-<link rel="icon" href="https://img.icons8.com/color/48/000000/artificial-intelligence.png" type="image/png">
+<title>KriBot Ultra Pro 3.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: #ffffff;
-  color: #000000;
+:root{
+  --primary:#10a37f;--bg:#0b1220;--card:#ffffff;--text:#111827;--ai:#eef2f7;--user:#2563eb;
 }
-.dark { background-color: #202123; color: #f7f7f8; }
-.container {
-  width: 600px;
-  max-width: 95%;
-  margin: 20px auto;
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  border: 1px solid #ddd;
-  background-color: #ffffff;
+.dark{
+  --bg:#020617;--card:#020617;--text:#e5e7eb;--ai:#1e293b;
 }
-.dark .container { background-color: #2b2b2b; border-color: #444; }
-.header {
-  background-color: #10a37f;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  padding: 12px 16px;
-}
-.controls {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  padding: 6px 12px;
-}
-.controls button {
-  font-size: 12px;
-  padding: 5px 8px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background: #f0f0f0;
-}
-.controls button:hover { background: #ccc; }
-.chat {
-  flex: 1;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  background-color: #f7f7f8;
-}
-.dark .chat { background-color: #202123; }
-.message {
-  display: flex;
-  max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 20px;
-  word-wrap: break-word;
-  opacity: 0;
-  animation: fadeIn 0.3s forwards;
-}
-.message.user {
-  align-self: flex-end;
-  background: #0a84ff;
-  color: white;
-  border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 20px;
-}
-.message.ai {
-  align-self: flex-start;
-  background: #f3f3f3;
-  color: #202123;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 20px;
-}
-.dark .message.ai { background: #3a3a3c; color: #f7f7f8; }
-.message.ai img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 10px;
-  flex-shrink: 0;
-  background-color: #10a37f;
-  padding: 4px;
-}
-.typing {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding-left: 6px;
-}
-.dot {
-  width: 6px; height: 6px;
-  background: gray; border-radius: 50%;
-  opacity: 0.3;
-  animation: blink 1s infinite;
-}
-.dot:nth-child(1){ animation-delay: 0s; }
-.dot:nth-child(2){ animation-delay: 0.2s; }
-.dot:nth-child(3){ animation-delay: 0.4s; }
-@keyframes blink {0%,80%,100%{opacity:0.3;}40%{opacity:1;}}
-.input-area {
-  display: flex;
-  padding: 12px;
-  gap: 6px;
-  border-top: 1px solid #ccc;
-  background-color: #f7f7f8;
-}
-.dark .input-area { background-color: #202123; border-top-color: #444; }
-input {
-  flex: 1;
-  padding: 10px 16px;
-  border-radius: 25px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-.dark input { border-color: #555; background-color:#333; color:white; }
-.send {
-  border:none; background:#10a37f; color:white;
-  border-radius:50%; width:40px; height:40px; cursor:pointer; font-size:16px;
-}
-.send:hover { background:#0d7c64; }
-.footer { text-align:center; padding:8px; font-size:12px; color:gray; }
-@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Segoe UI,system-ui;background:var(--bg);color:var(--text);overflow-x:hidden;position:relative;}
+.hidden{display:none;}
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
+.splash{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.splash-card{background:var(--card);color:var(--text);padding:42px;border-radius:24px;text-align:center;max-width:420px;width:90%;box-shadow:0 30px 60px rgba(0,0,0,.4);transition: transform .3s ease;}
+.splash-card:hover{transform: scale(1.03);}
+.splash h1{margin:0;font-size:32px;}
+.splash p{opacity:.8;margin:10px 0;}
+.start{margin-top:20px;padding:14px 32px;border:none;border-radius:999px;background:var(--primary);color:white;font-size:16px;cursor:pointer;transition:.2s;}
+.start:hover{transform:scale(1.05);}
+.app{max-width:1100px;margin:24px auto;background:var(--card);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden;}
+header{background:linear-gradient(135deg,#0f766e,#10a37f);color:white;padding:16px 22px;font-size:22px;font-weight:700;display:flex;align-items:center;gap:10px;}
+nav{display:flex;gap:8px;padding:12px;background:#e5e7eb;flex-wrap:wrap;}
+nav button{background:white;border:1px solid #e5e7eb;border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer;transition:.2s;}
+nav button:hover{background:var(--primary);color:white;box-shadow:0 8px 20px rgba(16,163,127,.4);}
+.panel{padding:18px;}
+.mode{margin-bottom:10px;}
+.chat{height:400px;background:linear-gradient(#ffffff,#f9fafb);border-radius:18px;padding:18px;overflow-y:auto;box-shadow:inset 0 0 0 1px #e5e7eb,0 10px 30px rgba(0,0,0,.1);}
+.msg{max-width:75%;padding:12px 14px;border-radius:18px;margin-bottom:10px;line-height:1.5;font-size:15px;white-space: pre-line;word-break: break-word;transition: all .3s ease;}
+.user{background:linear-gradient(135deg,#2563eb,#1e40af);color:white;margin-left:auto;}
+.ai{background:var(--ai);}
+.typing{opacity:.7;font-style:italic;}
+.typing::after{content:" •••";animation:blink 1.4s infinite;}
+@keyframes blink{0%{opacity:.2}50%{opacity:1}100%{opacity:.2;}}
+.footer{display:flex;gap:8px;background:white;padding:10px;border-radius:18px;margin-top:12px;box-shadow:0 12px 30px rgba(0,0,0,.2);}
+input{flex:1;padding:12px;border-radius:12px;border:1px solid #d1d5db;font-size:15px;}
+.send{background:var(--primary);color:white;border:none;border-radius:12px;padding:12px 18px;cursor:pointer;}
+.voice{background:#ef4444;color:white;border:none;border-radius:12px;padding:12px;cursor:pointer;}
+.clear{background:#f59e0b;color:white;border:none;border-radius:12px;padding:12px 18px;cursor:pointer;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;}
+.card{background:white;padding:18px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.1);text-align:center;}
+.cert{border:4px solid var(--primary);border-radius:20px;padding:32px;text-align:center;}
+.badge{display:inline-block;background:gold;padding:6px 14px;border-radius:999px;margin:6px;font-weight:700;}
 </style>
-</head>
-
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<canvas id="bgCanvas"></canvas>
 <body>
-<div class="container">
-  <div class="header">🤖 KriBot – ChatGPT Style</div>
-  <div class="controls">
-    <button onclick="clearChat()">🗑 Clear</button>
-    <button onclick="toggleDark()">🌙 Dark</button>
-    <button onclick="resetAPI()">🔑 Reset Key</button>
+
+<div id="splash" class="splash">
+  <div class="splash-card">
+    <h1>🤖 KriBot Ultra Pro</h1>
+    <p>Created by <b>Krishiv</b><br>Grade 6 Student<br>Rastrothana Vidyakendra, Mangaluru</p>
+    <input id="username" placeholder="Enter your name" style="padding:8px 12px; border-radius:8px; border:1px solid #d1d5db; margin-top:10px; width:80%;">
+    <br>
+    <button class="start" id="startBtn">🚀 Start KriBot</button>
   </div>
-  <div class="chat" id="chat">
-    <div class="message ai">
-      <img src="https://img.icons8.com/color/48/000000/robot-2.png">
-      <span>AI: Hello! I’m <b>KriBot</b>, your AI assistant. Type a question or use the 🎤 button.</span>
-    </div>
-    <div class="message ai">
-      <img src="https://img.icons8.com/color/48/000000/robot-2.png">
-      <span>Created by Krishiv, Grade 6 Student.</span>
-    </div>
+</div>
+
+<div id="app" class="app hidden">
+<header>🤖 KriBot Ultra Pro</header>
+<nav>
+  <button onclick="show('chatP')">💬 Chat</button>
+  <button onclick="show('statsP')">📊 Stats</button>
+  <button onclick="show('certP')">🏅 Certificate</button>
+  <button onclick="show('aboutP')">ℹ️ About</button>
+  <button onclick="toggleDark()">🌙</button>
+</nav>
+
+<div id="chatP" class="panel">
+  <select id="mode" class="mode">
+    <option>Normal</option>
+    <option>Math Solver</option>
+    <option>Homework Helper</option>
+  </select>
+  <div id="chat" class="chat"></div>
+  <div class="footer">
+    <input id="input" placeholder="Ask KriBot..." onkeydown="if(event.key==='Enter')ask()">
+    <button class="voice" onclick="voice()">🎤</button>
+    <button class="send" onclick="ask()">Send</button>
+    <button class="clear" onclick="clearChat()">🧹 Clear</button>
   </div>
-  <div class="typing" id="typing"></div>
-  <div class="input-area">
-    <input id="question" placeholder="Type a message...">
-    <button class="send" onclick="startVoice()">🎤</button>
-    <button class="send" onclick="askAI()">➤</button>
+</div>
+
+<div id="statsP" class="panel hidden">
+<h3 id="statsTitle">📊 Usage Statistics</h3>
+<div class="grid">
+  <div class="card"><h2 id="uC">0</h2>User Messages</div>
+  <div class="card"><h2 id="aC">0</h2>AI Replies</div>
+  <div class="card"><h2 id="score">0</h2>Total Score</div>
+</div>
+</div>
+
+<div id="certP" class="panel hidden">
+  <div class="cert">
+    <h2>Certificate of Achievement</h2>
+    <h1 id="certName">User</h1>
+    <p>has successfully explored</p>
+    <h3>KriBot Ultra Pro</h3>
+    <p>Created by <b>Krishiv (Grade 6)</b></p>
+    <span class="badge">🏆 AI Explorer</span>
+    <br><br>
+    <button onclick="window.print()">🖨️ Print</button>
   </div>
-  <div class="footer">Created by Krishiv, Grade 6 Student</div>
+</div>
+
+<div id="aboutP" class="panel hidden">
+  <h3>About This Project</h3>
+  <p>KriBot Ultra Pro is a professional AI tutor <b>created by Krishiv</b>. Features:
+    <ul>
+      <li>Advanced Math Solver (fractions, powers, roots, algebra, quadratics, simultaneous equations)</li>
+      <li>Step-by-step explanations with LaTeX</li>
+      <li>Homework helper & word problem solver</li>
+      <li>Friendly chat (responds to thanks, greetings, jokes, goodbyes)</li>
+      <li>Voice input & clear chat</li>
+      <li>Dark mode & stylish UI</li>
+      <li>Persistent username & statistics tracking</li>
+    </ul>
+  </p>
+</div>
 </div>
 
 <script>
-const chat=document.getElementById("chat");
-const typing=document.getElementById("typing");
+// --- START BUTTON ---
+document.getElementById('startBtn').addEventListener('click', start);
 
-/* Restore chat + theme */
-chat.innerHTML += localStorage.getItem("chat")||"";
-if(localStorage.getItem("dark")==="yes") document.body.classList.add("dark");
+// --- PARTICLE BACKGROUND ---
+const canvas=document.getElementById('bgCanvas'); const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+let particles=[]; 
+for(let i=0;i<150;i++) particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,s:Math.random()*0.5+0.2});
+function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,2*Math.PI);ctx.fillStyle='rgba(16,163,127,0.6)';ctx.fill();p.x+=p.s;p.y+=p.s;if(p.x>canvas.width)p.x=0;if(p.y>canvas.height)p.y=0;});requestAnimationFrame(animateParticles);}
+animateParticles(); window.onresize=()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;};
 
-/* API key prompt */
-function askForAPIKey() {
-  let key = localStorage.getItem("OPENAI_API_KEY");
-  while(!key || key.trim()===""){
-    key = prompt("Enter your OpenAI API key to use KriBot:");
-    if(key && key.trim()!=="") localStorage.setItem("OPENAI_API_KEY", key.trim());
-  }
-  return key;
-}
-let OPENAI_API_KEY = askForAPIKey();
+// --- DATA ---
+let data=JSON.parse(localStorage.getItem("kribot"))||{chat:[],u:0,a:0,username:""};
+let userName=data.username||"";
+document.getElementById("username").value=userName;
+const chat=document.getElementById("chat"),input=document.getElementById("input");
+const splash=document.getElementById("splash"),app=document.getElementById("app");
+const certName=document.getElementById("certName"),statsTitle=document.getElementById("statsTitle");
 
-/* Save chat */
-function saveChat(){ localStorage.setItem("chat",chat.innerHTML); }
-
-/* Add message */
-function addMessage(text,cls){
-  const div=document.createElement("div");
-  div.className="message "+cls;
-  if(cls==="ai"){
-    const img=document.createElement("img");
-    img.src="https://img.icons8.com/color/48/000000/robot-2.png";
-    div.appendChild(img);
-  }
-  const span=document.createElement("span");
-  span.innerHTML=text;
-  div.appendChild(span);
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  saveChat();
+// --- FUNCTIONS ---
+function start(){
+  const uname=document.getElementById("username").value.trim();
+  userName=uname||"User";
+  certName.innerText=userName; statsTitle.innerText=`📊 Usage Statistics for ${userName}`;
+  data.username=userName; save();
+  splash.style.display="none"; app.classList.remove("hidden");
+  if(data.chat.length===0) add(`👋 Hi ${userName}! I'm KriBot Ultra Pro.\nSelect a mode and start asking!`,"ai");
+  else load(); input.focus();
 }
 
-/* Typing dots */
-function showTyping(){ typing.innerHTML='<span class="dot"></span><span class="dot"></span><span class="dot"></span>'; }
-function hideTyping(){ typing.innerHTML=''; }
+function show(id){["chatP","statsP","certP","aboutP"].forEach(p=>document.getElementById(p).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function add(text,type){const d=document.createElement("div");d.className="msg "+type;d.innerHTML=text;chat.appendChild(d);chat.scrollTo({top:chat.scrollHeight,behavior:"smooth"});data.chat.push({text,type});save();MathJax.typesetPromise();}
+function clearChat(){if(confirm("Are you sure you want to clear chat?")){chat.innerHTML="";data.chat=[];data.u=0;data.a=0;save();update();}}
+function save(){localStorage.setItem("kribot",JSON.stringify(data));}
+function load(){chat.innerHTML="";data.chat.forEach(m=>add(m.text,m.type));update();}
+function update(){document.getElementById("uC").innerText=data.u;document.getElementById("aC").innerText=data.a;document.getElementById("score").innerText=data.u*2+data.a*3;save();}
+function toggleDark(){document.body.classList.toggle("dark");}
 
-/* Clear chat */
-function clearChat(){ if(confirm("Clear chat?")){ chat.innerHTML=''; hideTyping(); localStorage.removeItem("chat"); } }
+// Voice input
+function voice(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return alert("Voice not supported");const r=new SR();r.start();r.onresult=e=>input.value=e.results[0][0].transcript;}
 
-/* Dark mode */
-function toggleDark(){ document.body.classList.toggle("dark"); localStorage.setItem("dark",document.body.classList.contains("dark")?"yes":"no"); }
-
-/* Reset API */
-function resetAPI(){ localStorage.removeItem("OPENAI_API_KEY"); OPENAI_API_KEY = askForAPIKey(); alert("API key updated!"); }
-
-/* Voice input */
-function startVoice(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR) return alert("Voice not supported");
-  const r=new SR(); r.lang="en-IN"; r.onresult=e=>document.getElementById("question").value=e.results[0][0].transcript; r.start();
-}
-
-/* Get AI answer from OpenAI */
-async function getAnswerOnline(question){
-  const url="https://api.openai.com/v1/chat/completions";
-  const res=await fetch(url,{
-    method:"POST",
-    headers:{"Content-Type":"application/json","Authorization":`Bearer ${OPENAI_API_KEY}`},
-    body:JSON.stringify({model:"gpt-3.5-turbo",messages:[{role:"user",content:question}],temperature:0.7})
-  });
-  const data = await res.json();
-  return data.choices[0].message.content;
-}
-
-/* Ask AI with typing animation */
-async function askAI(){
-  const q=document.getElementById("question").value.trim();
-  if(!q) return;
-
-  addMessage(q,"user");
-  document.getElementById("question").value="";
-  showTyping();
-
+// --- ADVANCED MATH ---
+function parseFraction(expr){try{return Function('return '+expr.replace(/\b(\d+)\/(\d+)\b/g,'($1/$2)'))();}catch{return null;}}
+function mathTutor(expr){
+  expr=expr.replace(/\s+/g,'').replace(/√/g,'Math.sqrt').replace(/\^/g,'**');let steps='';
   try{
-    const answer = await getAnswerOnline(q);
-    hideTyping();
-
-    // AI bubble
-    const div = document.createElement("div");
-    div.className = "message ai";
-    const img = document.createElement("img");
-    img.src = "https://img.icons8.com/color/48/000000/robot-2.png";
-    div.appendChild(img);
-    const span = document.createElement("span");
-    div.appendChild(span);
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-
-    // Animate typing character by character
-    let i = 0;
-    function typeChar() {
-      if(i < answer.length){
-        span.innerHTML += answer.charAt(i);
-        i++;
-        chat.scrollTop = chat.scrollHeight;
-        setTimeout(typeChar,15);
-      } else saveChat();
-    }
-    typeChar();
-
-  } catch(err){
-    hideTyping();
-    addMessage("Error: Could not get answer. Check API key / internet.","ai");
-    console.error(err);
-  }
+    if(expr.includes(';')){let lines=expr.split(';');if(lines.length===2){let parseEq=e=>{let m=/([+-]?\d*)x([+-]?\d*)y=([+-]?\d*)/.exec(e);return m?[parseFloat(m[1]||1),parseFloat(m[2]||1),parseFloat(m[3]||0)]:[0,0,0];};let [a1,b1,c1]=parseEq(lines[0]),[a2,b2,c2]=parseEq(lines[1]);let det=a1*b2-a2*b1;if(det===0)return{result:null,explanation:'No unique solution.'};let x=(c1*b2-c2*b1)/det,y=(a1*c2-a2*c1)/det;steps=`Solving: ${lines[0]}; ${lines[1]}<br>Det=${det}<br>x=${x}, y=${y}`;return{result:{x,y},explanation:steps};}}
+    let quad=expr.match(/^([+-]?\d*\.?\d*)x\*\*2([+-]?\d*\.?\d*)x([+-]?\d*\.?\d*)=0$/);if(quad){let a=parseFloat(quad[1]||1),b=parseFloat(quad[2]||0),c=parseFloat(quad[3]||0);let D=b*b-4*a*c;let x1=(-b+Math.sqrt(D))/(2*a),x2=(-b-Math.sqrt(D))/(2*a);steps=`Quadratic: \[${expr.replace(/\*\*/g,'^')}\]<br>D=${D}<br>x1=${x1}, x2=${x2}`;return{result:[x1,x2],explanation:steps};}
+    let val=parseFraction(expr);if(val!==null)steps=`Expression: \[${expr}\]<br>Result: ${val}`;else{let res=Function('return ('+expr+');')();steps=`Expression: \[${expr}\]<br>Result: ${res}`;}return{result:val,explanation:steps};
+  }catch{return{result:null,explanation:'Invalid expression.'};}
 }
 
-// Send message on Enter key
-document.getElementById("question").addEventListener("keydown", function(e){
-  if(e.key==="Enter" && !e.shiftKey){
-    e.preventDefault();
-    askAI();
-  }
-});
+// --- ASK ---
+function ask(){
+  const q=input.value.trim(); if(!q)return; add(q,'user'); data.u++; input.value='';
+  const t=document.createElement('div'); t.className='msg ai typing'; t.innerText='KriBot is thinking'; chat.appendChild(t); chat.scrollTo({top:chat.scrollHeight,behavior:'smooth'});
+  let r='',delay=800;
+  if(mode.value==='Math Solver'){const math=mathTutor(q); r=math.explanation; delay=1000+q.length*50;}
+  else if(mode.value==='Homework Helper'){r=`Let's think step by step:<br>${q}`; delay=1000+q.length*50;}
+  else{const l=q.toLowerCase();
+    if(/hi|hello|hey/.test(l)) r=`Hello ${userName}! 👋 How can I help you today?`;
+    else if(/how are you/.test(l)) r="I'm KriBot, always ready to help! 😄";
+    else if(/joke/.test(l)) r="Why did the computer go to the doctor? It caught a virus! 😆";
+    else if(/thank\s?you|thanks/.test(l)) r=`You're welcome, ${userName}! 😊`;
+    else if(/bye|see you/.test(l)) r=`Goodbye ${userName}! 👋 See you soon.`;
+    else r=`You asked: ${q}\nThis is a smart demo AI response.`;}
+  setTimeout(()=>{t.remove(); add(r,'ai'); data.a++; update();},delay);
+}
 </script>
 </body>
 </html>
